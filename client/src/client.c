@@ -1,5 +1,5 @@
 #include "client.h"
-
+#include <readline/readline.h>
 int main(void)
 {
 	/*---------------------------------------------------PARTE 2-------------------------------------------------------------*/
@@ -8,6 +8,8 @@ int main(void)
 	char* ip;
 	char* puerto;
 	char* valor;
+
+	char* linea_ingresada;
 
 	t_log* logger;
 	t_config* config;
@@ -30,22 +32,35 @@ int main(void)
 	} else {
 		log_info(logger, "Se inició la configuración");
 	}
-	
-	valor = config_get_string_value(config,"CLAVE");
-	ip = config_get_string_value(config, "IP");
-	puerto = config_get_int_value(config, "PUERTO");
-	log_info(logger, "La clave es: %s", valor);
-	log_info(logger, "El IP es: %s", ip);
-	log_info(logger, "El Puerto es: %d", puerto);
 
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
 
 	// Loggeamos el valor de config
+	
+	valor = config_get_string_value(config,"CLAVE");
+	ip = config_get_string_value(config, "IP");
+	puerto = config_get_string_value(config, "PUERTO");
+	log_info(logger, "La clave es: %s", valor);
+	log_info(logger, "El IP es: %s", ip);
+	log_info(logger, "El Puerto es: %s", puerto);
+
+
+
+
+
 
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
+	linea_ingresada = readline("> ");
+	while(linea_ingresada != NULL && strlen(linea_ingresada)>0)
+	{
+		log_info(logger, linea_ingresada);
+		free(linea_ingresada);
+		linea_ingresada = readline("> ");
+	}
 
+	free(linea_ingresada);
 	leer_consola(logger);
 
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
@@ -61,6 +76,8 @@ int main(void)
 	paquete(conexion);
 
 	log_destroy(logger);
+
+	config_destroy(config);
 
 	terminar_programa(conexion, logger, config);
 

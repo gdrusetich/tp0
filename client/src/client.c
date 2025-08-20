@@ -13,16 +13,30 @@ int main(void)
 	t_config* config;
 
 	/* ---------------- LOGGING ---------------- */
-
+	logger = log_create("logger.log","logger", true, LOG_LEVEL_INFO);
 	logger = iniciar_logger();
 
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
-
+	log_info(logger, "Hola! Soy un log");
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
-	config = iniciar_config();
+	config = config_create("cliente.config");
+	//config = iniciar_config();
+	if(config == NULL)
+	{
+		log_info(logger, "No se inició la configuración");
+	} else {
+		log_info(logger, "Se inició la configuración");
+	}
+	
+	valor = config_get_string_value(config,"CLAVE");
+	ip = config_get_string_value(config, "IP");
+	puerto = config_get_int_value(config, "PUERTO");
+	log_info(logger, "La clave es: %s", valor);
+	log_info(logger, "El IP es: %s", ip);
+	log_info(logger, "El Puerto es: %d", puerto);
 
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
@@ -45,6 +59,8 @@ int main(void)
 
 	// Armamos y enviamos el paquete
 	paquete(conexion);
+
+	log_destroy(logger);
 
 	terminar_programa(conexion, logger, config);
 

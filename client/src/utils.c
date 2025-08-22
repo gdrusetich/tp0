@@ -29,32 +29,35 @@ int crear_conexion(char *ip, char* puerto)
 
 	err = getaddrinfo(ip, puerto, &hints, &server_info);
 	if (err != 0)
-	{
-    	perror("getaddrinfo");
-    	exit(1);
-	}
+    {
+        perror("getaddrinfo");
+        return -1;
+    }
 
 	// Ahora vamos a crear el socket.
 	int socket_cliente = socket(server_info->ai_family,
 								server_info->ai_socktype,
 								server_info->ai_protocol);
 
-	if(socket_cliente <0)
-	{
-		perror("socket");
-		exit(1);
-	}
+	if(socket_cliente < 0)
+    {
+        perror("socket");
+        freeaddrinfo(server_info);
+        return -1;
+    }
 
 	// Ahora que tenemos el socket, vamos a conectarlo
 	err = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
 	if(err < 0)
-	{
-		perror("connect");
-		exit(1);
-	}
+    {
+        perror("connect");
+        close(socket_cliente);
+        freeaddrinfo(server_info);
+        return -1;
+    }
+
 
 	freeaddrinfo(server_info);
-
 	return socket_cliente;
 }
 

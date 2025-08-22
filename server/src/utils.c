@@ -53,7 +53,7 @@ int esperar_cliente(int socket_servidor)
 		log_info(logger, "Error al esperar al cliente");
 		exit(1);
 	}
-		log_info(logger, "Se conecto un cliente!");
+	log_info(logger, "Se conecto un cliente!");
 	return socket_cliente;
 }
 

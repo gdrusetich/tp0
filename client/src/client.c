@@ -41,10 +41,11 @@ int main(void)
 	valor = config_get_string_value(config,"CLAVE");
 	ip = config_get_string_value(config, "IP");
 	puerto = config_get_string_value(config, "PUERTO");
+	
 	log_info(logger, "La clave es: %s", valor);
 	log_info(logger, "El IP es: %s", ip);
 	log_info(logger, "El Puerto es: %s", puerto);
-
+	
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
@@ -55,7 +56,8 @@ int main(void)
 	conexion = crear_conexion(ip, puerto);
 	if(conexion < 0)
 	{
-		log_info(logger, "no se pudo crear la conexion");
+		log_error(logger,"No se pudo crear la conexion");
+		terminar_programa(conexion, logger, config);
 		exit(1);
 	}
 	log_info(logger, "Se creó una conexión al servidor!");

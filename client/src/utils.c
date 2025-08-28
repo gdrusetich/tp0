@@ -34,11 +34,10 @@ int crear_conexion(char *ip, char* puerto)
         return -1;
     }
 
-	// Ahora vamos a crear el socket.
+	// Ahora vamos a crear el socket y probamos errores del socket
 	int socket_cliente = socket(server_info->ai_family,
 								server_info->ai_socktype,
 								server_info->ai_protocol);
-
 	if(socket_cliente < 0)
     {
         perror("socket");
@@ -55,7 +54,6 @@ int crear_conexion(char *ip, char* puerto)
         freeaddrinfo(server_info);
         return -1;
     }
-
 
 	freeaddrinfo(server_info);
 	return socket_cliente;
